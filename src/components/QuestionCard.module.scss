@@ -1,0 +1,35 @@
+.container{
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #fff;
+    &:hover{
+        box-shadow: 0 4px 10px yellow;
+        background-color: lightgray;
+    }
+}
+.title{
+    display: flex;
+    .right{
+        text-align: right;
+        flex: 3;
+    }
+    .left{
+        flex:3;
+        text-align: left;
+        font-size: 14px;
+    }
+}
+.button-container{
+    display: flex;
+    .left{
+        flex:3;
+    }
+    .right{
+        flex:3;
+        text-align: right;
+        button{
+            color:blue;
+        }
+    }
+}
