@@ -2,7 +2,12 @@ import { FC } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import styles from './ManageLayout.module.scss'
 import { Button, Space, Divider, message } from 'antd'
-import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
+import {
+  PlusOutlined,
+  BarsOutlined,
+  StarOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons'
 import { createQuestionService } from '../services/question'
 import { DYNAMIIC_EDIT_PATH } from '../router'
 import { useRequest } from 'ahooks'

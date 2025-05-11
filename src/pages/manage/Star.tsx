@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
 import styles from './Common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
-import { Empty, Typography, Spin } from 'antd'
+import { Empty, Typography, Spin, Pagination } from 'antd'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import ListPage from '../../components/ListPage'
 
 const Star: FC = () => {
   //const questionListData = [{}]
@@ -35,7 +36,9 @@ const Star: FC = () => {
           })
         )}
       </div>
-      <div className={styles.footer}>Pages</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </div>
   )
 }

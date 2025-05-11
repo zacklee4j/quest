@@ -1,6 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './QuestionCard.module.scss'
-import { Button, Divider, Space, Tag, Popconfirm, Modal } from 'antd'
+import { Button, Divider, Space, Tag, Popconfirm, Modal, message } from 'antd'
+import {
+  duplicateQuestionService,
+  updateQuestionService,
+} from '../services/question'
+import { useRequest } from 'ahooks'
 import {
   EditOutlined,
   LineChartOutlined,
@@ -17,31 +22,81 @@ type PropsType = {
   title: string
   isPublished: boolean
   isStar: boolean
+  isDelete: boolean
   answerCount: number
   createTime: string
 }
 const QuestionCard: FC<PropsType> = (props: PropsType) => {
-  function duplicate() {
-    alert('Do Copying')
-  }
+  const { _id, title, createTime, answerCount, isPublished, isStar } = props
+  const nav = useNavigate()
+  const [isStarState, setIsStarState] = useState(isStar)
+  const [isDeleteState, setIsDeleteState] = useState(false)
+  // function duplicate() {
+  //   alert('Do Copying')
+  // }
+  const { loading: duplicateLoading, run: duplicateQuestion } = useRequest(
+    async function () {
+      const data = await duplicateQuestionService(_id)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess(result) {
+        message.success('duplicate successfully!')
+        nav(`/question/edit/${result.id}`)
+      },
+    }
+  )
   const { confirm } = Modal
+  const { loading: deleteLoading, run: deleteQuestion } = useRequest(
+    async function () {
+      const data = await updateQuestionService(_id, { isDelete: true })
+      return data
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('Delete Successfully!')
+        setIsDeleteState(true)
+      },
+    }
+  )
   function delQ() {
     confirm({
       title: 'Are you sure to delete it?',
       icon: <ExclamationCircleOutlined />,
-      onOk: () => alert('Delete'),
+      onOk: deleteQuestion,
     })
   }
-  const { _id, title, createTime, answerCount, isPublished, isStar } = props
-  const nav = useNavigate()
+  const { loading: isStarLoading, run: updateIsStar } = useRequest(
+    async () => {
+      await updateQuestionService(_id, { isStar: !isStarState })
+    },
+    {
+      manual: true,
+      onSuccess() {
+        setIsStarState(!isStarState)
+        message.success('update successfully!')
+      },
+    }
+  )
+  if (isDeleteState) return null
   return (
     <div className={styles.container}>
       <div className={styles.title}>
         <div className={styles.left}>
-          <Link to={isPublished ? `/question/statistic/${_id}` : `/question/edit/${_id}`}>
-            <Space>
-              {isStar && <StarOutlined style={{ color: 'red' }} />}
-              {_id} {title}
+          <Link
+            to={
+              isPublished
+                ? `/question/statistic/${_id}`
+                : `/question/edit/${_id}`
+            }
+          >
+            <Space align="baseline">
+              {isStarState && (
+                <StarOutlined style={{ color: 'red', fontSize: '14px' }} />
+              )}
+              {title}
             </Space>
           </Link>
         </div>
@@ -57,7 +112,9 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
           </Space>
         </div>
       </div>
-      <Divider style={{ borderColor: 'transparent', margin: '2px  0' }}></Divider>
+      <Divider
+        style={{ borderColor: 'transparent', margin: '2px  0' }}
+      ></Divider>
       <div className={styles['button-container']}>
         <div className={styles.left}>
           <Space>
@@ -82,14 +139,20 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
         </div>
         <div className={styles.right}>
           <Space>
-            <Button icon={isStar ? <StarFilled /> : <StarOutlined />} type="text" size="small">
-              {isStar ? 'marked' : 'mark'}
+            <Button
+              icon={isStarState ? <StarFilled /> : <StarOutlined />}
+              type="text"
+              size="small"
+              onClick={updateIsStar}
+            >
+              {isStarState ? 'marked' : 'mark'}
             </Button>
             <Popconfirm
               title="Do you want to copy it?"
               okText="Yes"
               cancelText="No"
-              onConfirm={duplicate}
+              onConfirm={duplicateQuestion}
+              disabled={duplicateLoading}
             >
               <Button type="text" size="small" icon={<CopyOutlined />}>
                 copy
@@ -102,6 +165,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
               onClick={() => {
                 delQ()
               }}
+              disabled={deleteLoading}
             >
               delete
             </Button>

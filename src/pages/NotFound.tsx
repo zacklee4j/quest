@@ -12,7 +12,11 @@ const NotFound: FC = () => {
         title="404"
         subTitle="Sorry, the page you visited does not exist!"
         extra={
-          <Button size="large" type="primary" onClick={() => nav(MANAGE_LIST_PATH)}>
+          <Button
+            size="large"
+            type="primary"
+            onClick={() => nav(MANAGE_LIST_PATH)}
+          >
             Back Home
           </Button>
         }

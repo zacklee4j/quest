@@ -1,18 +1,22 @@
-.header{
+.header {
     display: flex;
 
-    .left{
-        flex:1;
+    .left {
+        flex: 1;
     }
-    .right{
-        flex:1;
-        text-align:right;
+
+    .right {
+        flex: 1;
+        text-align: right;
     }
 }
-.content{
+
+.content {
     text-align: left;
     margin-bottom: 20PX;
 }
-.footer{
+
+.footer {
     text-align: center;
+    justify-items: center;
 }

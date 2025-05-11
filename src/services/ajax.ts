@@ -1,12 +1,23 @@
 import axios from 'axios'
 import { message } from 'antd'
+import { getToken } from '../utils/userToken'
 
-const ajaxInterface = axios.create({
+const ajaxInstance = axios.create({
   timeout: 10 * 1000,
 })
-
+// set user token to request header
+const userToken = getToken() || ''
+ajaxInstance.interceptors.request.use(
+  config => {
+    config.headers['Authorization'] = `Bearer ${userToken}`
+    return config
+  },
+  error => {
+    Promise.reject(error)
+  }
+)
 // reponse intercept
-ajaxInterface.interceptors.response.use(res => {
+ajaxInstance.interceptors.response.use(res => {
   // convrt to {}
   const resData = (res.data || {}) as ResDataType
   const { errno, data, msg } = resData
@@ -19,8 +30,9 @@ ajaxInterface.interceptors.response.use(res => {
   }
   return data as any
 })
-export default ajaxInterface
+export default ajaxInstance
 
+// resdata type
 export type ResType = {
   errno: number
   data?: ResDataType

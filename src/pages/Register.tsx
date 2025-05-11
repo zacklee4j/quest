@@ -1,14 +1,31 @@
-import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
-import { Typography, Space, Form, Input, Button } from 'antd'
+import React, { FC, useState, ChangeEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Typography, Space, Form, Input, Button, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import styles from '../components/Register.module.scss'
+import { userRegisterService } from '../services/user'
 import { LOGIN_PATH } from '../router'
+import { useRequest } from 'ahooks'
 
 const { Title } = Typography
 const Register: FC = () => {
+  const nav = useNavigate()
+  const { run: userRegister } = useRequest(
+    async value => {
+      const { username, password, nickname } = value
+      const data = await userRegisterService(username, password, nickname)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('Register Successfully!')
+        nav(LOGIN_PATH)
+      },
+    }
+  )
   const onFinish = (value: any) => {
-    console.log(value)
+    userRegister(value || {})
   }
   return (
     <div className={styles.container}>
@@ -18,7 +35,11 @@ const Register: FC = () => {
         </Space>
       </div>
       <div>
-        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} onFinish={onFinish}>
+        <Form
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 16 }}
+          onFinish={onFinish}
+        >
           <Form.Item label="username" name="username">
             <Input />
           </Form.Item>

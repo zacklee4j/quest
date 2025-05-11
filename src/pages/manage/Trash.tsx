@@ -1,57 +1,87 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styles from './Common.module.scss'
-import { Empty, Typography, Table, Tag, Button, Space, Spin } from 'antd'
+import {
+  Empty,
+  Typography,
+  Table,
+  Button,
+  Space,
+  Spin,
+  message,
+  Modal,
+} from 'antd'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import ListPage from '../../components/ListPage'
+import { TRASH_TABLE_TITLE } from '../../const/trashTitle'
+import {
+  updateQuestionService,
+  deleteCompletelyService,
+} from '../../services/question'
+import { useRequest } from 'ahooks'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 
+const { confirm } = Modal
 const Trash: FC = () => {
   //const questionListData = [{}]
   const { Title } = Typography
-  const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true })
+  const {
+    data = {},
+    loading,
+    refresh,
+  } = useLoadQuestionListData({ isDeleted: true })
   const { list = [], total = 0 } = data
-  const tableColumn = [
-    {
-      title: 'questionaire',
-      dataIndex: 'title',
-    },
-    {
-      title: 'AnsweredCount',
-      dataIndex: 'answerCount',
-    },
-    {
-      title: 'Created',
-      dataIndex: 'createTime',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'isPublished',
-      render: (isPublished: boolean) => {
-        return isPublished ? (
-          <Tag color="green">Published</Tag>
-        ) : (
-          <Tag color="volcano">NotPublished</Tag>
-        )
-      },
-    },
-  ]
+  const tableColumn = TRASH_TABLE_TITLE
   const [selectIds, setSelectedIds] = useState<string[]>([])
-  function cplDelete() {
-    if (window.confirm('CHeck Again？')) {
-      console.log('Checked!')
-      alert('删除' + selectIds)
-    } else {
-      console.log('Cancled!')
+  const { run: restoreQuestion } = useRequest(
+    async function (_id) {
+      for await (const _id of selectIds) {
+        await updateQuestionService(_id, { isDelete: false })
+      }
+    },
+    {
+      manual: true,
+      debounceWait: 500,
+      onSuccess() {
+        message.success('Restore Question Successfully!')
+        refresh()
+        setSelectedIds([])
+      },
     }
+  )
+  const { run: completeleDelete } = useRequest(
+    async () => {
+      await deleteCompletelyService(selectIds)
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('Completely Deleted!')
+        refresh()
+        setSelectedIds([])
+      },
+    }
+  )
+  function delQ() {
+    confirm({
+      title: 'This Option Can Not Cancle!',
+      icon: <ExclamationCircleOutlined />,
+      onOk: completeleDelete,
+    })
   }
-  function restore() {}
+
   const ContentElement = (
     <>
       <div style={{ marginBottom: '16px' }}>
         <Space>
-          <Button danger disabled={selectIds.length === 0} onClick={cplDelete}>
+          <Button danger disabled={selectIds.length === 0} onClick={delQ}>
             Comoletely Delete
           </Button>
-          <Button type="primary" disabled={selectIds.length === 0} onClick={restore}>
+          <Button
+            type="primary"
+            disabled={selectIds.length === 0}
+            onClick={restoreQuestion}
+          >
             Restore
           </Button>
         </Space>
@@ -67,7 +97,7 @@ const Trash: FC = () => {
           dataSource={list}
           columns={tableColumn}
           pagination={false}
-          rowKey={(q: any) => q.id}
+          rowKey={(q: any) => q._id}
         />
       </div>
     </>
@@ -94,7 +124,9 @@ const Trash: FC = () => {
           ContentElement
         )}
       </div>
-      <div className={styles.footer}>Pages</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </div>
   )
 }

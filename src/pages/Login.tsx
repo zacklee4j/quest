@@ -1,9 +1,12 @@
-import { FC, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { FC, useEffect, useState, ChangeEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from '../components/Login.module.scss'
-import { Typography, Space, Form, Input, Button, Checkbox } from 'antd'
+import { Typography, Space, Form, Input, Button, Checkbox, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
-import { REGISTER_PATH } from '../router'
+import { userLoginService } from '../services/user'
+import { REGISTER_PATH, MANAGE_LIST_PATH } from '../router'
+import { useRequest } from 'ahooks'
+import { setToken } from '../utils/userToken'
 
 const { Title } = Typography
 const USERNAME = 'USERNAME'
@@ -25,12 +28,29 @@ function getUserInfo() {
 
 const Login: FC = () => {
   const [form] = Form.useForm()
+  const nav = useNavigate()
   useEffect(() => {
     const { username, password } = getUserInfo()
     form.setFieldsValue({ username, password })
   }, [])
+  const { run: userLogin } = useRequest(
+    async values => {
+      const { username, password } = values
+      const data = await userLoginService(username, password)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess(result) {
+        message.success('Login Successfully')
+        const { token = '' } = result
+        setToken(token)
+        nav(MANAGE_LIST_PATH)
+      },
+    }
+  )
   const onFinish = (values: any) => {
-    console.log(values)
+    userLogin(values)
     if (values.remember) {
       // remember
       rememberUserInfo(values.username, values.password)
@@ -43,7 +63,7 @@ const Login: FC = () => {
     <div className={styles.container}>
       <div>
         <Space>
-          <Title>{<UserAddOutlined />}Register Page</Title>
+          <Title>{<UserAddOutlined />}Login Page</Title>
         </Space>
       </div>
       <div>
@@ -60,7 +80,11 @@ const Login: FC = () => {
           <Form.Item label="password" name="password">
             <Input.Password></Input.Password>
           </Form.Item>
-          <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 6 }}>
+          <Form.Item
+            name="remember"
+            valuePropName="checked"
+            wrapperCol={{ offset: 6, span: 6 }}
+          >
             <Checkbox>remember</Checkbox>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 6, span: 6 }}>
