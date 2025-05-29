@@ -79,3 +79,14 @@ export const REGISTER_PATH = '/register'
 export const HOME_PATH = '/'
 export const MANAGE_LIST_PATH = '/manage/list'
 export const DYNAMIIC_EDIT_PATH = '/question/edit'
+
+export function isLoginOrRegistered(path: string) {
+  const list = [LOGIN_PATH, REGISTER_PATH]
+  if (list.includes(path)) return true
+  return false
+}
+
+export function isNoNeedUserInfo(path: string) {
+  if ([LOGIN_PATH, REGISTER_PATH, HOME_PATH].includes(path)) return true
+  return false
+}

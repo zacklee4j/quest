@@ -1,0 +1,19 @@
+.canvas{
+    min-height: 100%;
+    background-color: white;
+    overflow: hidden;
+    
+}
+.component-wrapper{
+    margin: 12px;
+    border: 1px solid white;
+    padding: 12px;
+    border-radius: 3px;
+
+    &:hover{
+        border-color: red;
+    }
+}
+.component{
+    pointer-events: none;
+}
