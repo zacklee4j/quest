@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Typography } from 'antd'
 import { LoginOutlined } from '@ant-design/icons'
 import { MANAGE_LIST_PATH } from '../router'
-import styles from '../components/Home.module.scss'
+import styles from '../components/HomeComponent/Home.module.scss'
 
 const Home: FC = () => {
   const nav = useNavigate()

@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import styles from './Common.module.scss'
-import QuestionCard from '../../components/QuestionCard'
+import QuestionCard from '../../components/QuestionCardCoponent/QuestionCard'
 import { Empty, Typography, Spin, Pagination } from 'antd'
-import ListSearch from '../../components/ListSearch'
+import ListSearch from '../../components/ListComponent/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
-import ListPage from '../../components/ListPage'
+import ListPage from '../../components/ListComponent/ListPage'
 
 const Star: FC = () => {
   //const questionListData = [{}]

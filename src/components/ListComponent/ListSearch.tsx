@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react'
 import { Input } from 'antd'
 import { ChangeEvent } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
-import { LIST_SEARCH_PARAM_KEY } from '../const/serchconstant'
+import { LIST_SEARCH_PARAM_KEY } from '../../const/serchconstant'
 
 const { Search } = Input
 

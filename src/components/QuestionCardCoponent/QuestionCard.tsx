@@ -4,7 +4,7 @@ import { Button, Divider, Space, Tag, Popconfirm, Modal, message } from 'antd'
 import {
   duplicateQuestionService,
   updateQuestionService,
-} from '../services/question'
+} from '../../services/question'
 import { useRequest } from 'ahooks'
 import {
   EditOutlined,

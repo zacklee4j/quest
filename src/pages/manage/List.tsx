@@ -1,10 +1,10 @@
 import { FC, useState, useEffect, useRef, useMemo } from 'react'
 // import mockData from "../../mockInfo/mockData"
 import styles from './Common.module.scss'
-import QuestionCard from '../../components/QuestionCard'
+import QuestionCard from '../../components/QuestionCardCoponent/QuestionCard'
 import { useSearchParams } from 'react-router-dom'
 import { Typography, Spin, Empty } from 'antd'
-import ListSearch from '../../components/ListSearch'
+import ListSearch from '../../components/ListComponent/ListSearch'
 import { getQuestionListService } from '../../services/question'
 import { useDebounceFn, useRequest } from 'ahooks'
 import {

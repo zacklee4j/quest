@@ -10,9 +10,9 @@ import {
   message,
   Modal,
 } from 'antd'
-import ListSearch from '../../components/ListSearch'
+import ListSearch from '../../components/ListComponent/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
-import ListPage from '../../components/ListPage'
+import ListPage from '../../components/ListComponent/ListPage'
 import { TRASH_TABLE_TITLE } from '../../const/trashTitle'
 import {
   updateQuestionService,

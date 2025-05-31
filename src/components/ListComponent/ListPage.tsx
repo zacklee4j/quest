@@ -5,7 +5,7 @@ import {
   LIST_PAGE_SIZE,
   LIST_PAGESIZE_PARAM_KEY,
   LIST_PAGE_PARAM_KEY,
-} from '../const/serchconstant'
+} from '../../const/serchconstant'
 
 type PropsType = {
   total: number

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, ChangeEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import styles from '../components/Login.module.scss'
+import styles from '../components/LoginComponent/Login.module.scss'
 import { Typography, Space, Form, Input, Button, Checkbox, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import { userLoginService } from '../services/user'
