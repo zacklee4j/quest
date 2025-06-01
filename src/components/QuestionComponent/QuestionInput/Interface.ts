@@ -1,9 +1,9 @@
-export type QuestiongInputPropsType = {
+export type QuestionInputPropsType = {
   title?: string
   placeholder?: string
 }
 
-export const QuestionTitleDefaultProps: QuestiongInputPropsType = {
+export const QuestionInputDefaultProps: QuestionInputPropsType = {
   title: 'Input Box',
   placeholder: 'Default Value',
 }
