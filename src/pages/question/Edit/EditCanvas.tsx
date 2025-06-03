@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent } from 'react'
-import styles from './EditCanvas.module.scss'
+import styles from './editStyle/EditCanvas.module.scss'
 // import QuestionTitle from '../../../components/QuestionComponent/QuestionTitle/Components'
 // import QuestionInput from '../../../components/QuestionComponent/QuestionInput/Components'
 import classNames from 'classnames'
@@ -47,25 +47,28 @@ const EditCanvas: FC<EditCanvasType> = ({ loading }) => {
   }
   return (
     <div className={styles.canvas}>
-      {componentsList.map(c => {
-        const { fe_id } = c
-        const wrapperDefaultClassName = styles['component-wrapper']
-        const selectedIdClassName = styles['selected']
-        const wrapperClassName = classNames({
-          [wrapperDefaultClassName]: true,
-          [selectedIdClassName]: fe_id === selectedId,
-        })
+      {componentsList
+        .filter(c => !c.isHidden)
+        .map(c => {
+          // hide component when its hidden propty is true
+          const { fe_id } = c
+          const wrapperDefaultClassName = styles['component-wrapper']
+          const selectedIdClassName = styles['selected']
+          const wrapperClassName = classNames({
+            [wrapperDefaultClassName]: true,
+            [selectedIdClassName]: fe_id === selectedId,
+          })
 
-        return (
-          <div
-            key={fe_id}
-            className={wrapperClassName}
-            onClick={e => handleClick(e, fe_id)}
-          >
-            <div className={styles.component}>{genComponent(c)}</div>
-          </div>
-        )
-      })}
+          return (
+            <div
+              key={fe_id}
+              className={wrapperClassName}
+              onClick={e => handleClick(e, fe_id)}
+            >
+              <div className={styles.component}>{genComponent(c)}</div>
+            </div>
+          )
+        })}
     </div>
   )
 }

@@ -4,7 +4,7 @@ import {
   ComponentConfType,
   componentGroup,
 } from '../../../components/QuestionComponent'
-import styles from './ComponentsLib.module.scss'
+import styles from './editStyle/ComponentsLib.module.scss'
 
 import { nanoid } from 'nanoid'
 import { addNewComponent } from '../../../store/componentsReducer/index'

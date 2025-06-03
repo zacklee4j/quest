@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ComponentPropsType } from '../../components/QuestionComponent'
 import { produce } from 'immer'
 import { Component } from 'react'
+import getNextSelectedId from '../../utils/getNextSelectedId'
 
 // store component infomation
 export type ComponentInfoType = {
   fe_id: string
   type: string
   title: string
+  isHidden?: boolean
   //all the pomponents should use this props,so it should contain all kinds of compnents's infomation.
   props: ComponentPropsType
 }
@@ -56,9 +58,59 @@ export const componentReducer = createSlice({
       }
       state.selectedId = newComponent.fe_id
     },
+    // update component peops
+    changeComponentProps: (
+      state: ComponentsStateType,
+      act: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
+    ) => {
+      const { fe_id, newProps } = act.payload
+      // find the component to update
+      const targetComponent = state.componentsList.find(c => c.fe_id === fe_id)
+      if (targetComponent) {
+        targetComponent.props = {
+          ...targetComponent.props,
+          ...newProps,
+        }
+      }
+    },
+    deleteSelectedComponent: (state: ComponentsStateType) => {
+      const { componentsList, selectedId } = state
+      if (!selectedId) return
+      const selectedIndex = componentsList.findIndex(
+        c => c.fe_id === selectedId
+      )
+      // selected a new component
+      state.selectedId = getNextSelectedId(selectedId, componentsList)
+      state.componentsList.splice(selectedIndex, 1)
+    },
+    hiddenSelectedComponent: (
+      state: ComponentsStateType,
+      act: PayloadAction<{ fe_id: string; isHidden: boolean }>
+    ) => {
+      const { componentsList = [] } = state
+      const { fe_id, isHidden } = act.payload
+      let newSelectedId = ''
+      if (isHidden) {
+        newSelectedId = getNextSelectedId(fe_id, componentsList)
+      } else {
+        newSelectedId = fe_id
+      }
+      state.selectedId = newSelectedId
+      const curComponent = componentsList.find(c => c.fe_id === fe_id)
+
+      if (curComponent) {
+        curComponent.isHidden = isHidden
+      }
+    },
   },
 })
 
-export const { resetComponents, changeSelectedId, addNewComponent } =
-  componentReducer.actions
+export const {
+  resetComponents,
+  changeSelectedId,
+  addNewComponent,
+  changeComponentProps,
+  hiddenSelectedComponent,
+  deleteSelectedComponent,
+} = componentReducer.actions
 export default componentReducer.reducer

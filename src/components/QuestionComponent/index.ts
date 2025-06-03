@@ -10,6 +10,7 @@ export type ComponentConfType = {
   title: string
   type: string
   Component: FC<ComponentPropsType>
+  PropsComponent: FC<ComponentPropsType>
   defaultProps: ComponentPropsType
 }
 // list of all conponents' props
