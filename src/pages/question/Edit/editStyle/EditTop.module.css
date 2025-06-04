@@ -1,0 +1,28 @@
+.wrapper {
+  flex: auto;
+  padding: 12px 0;
+}
+
+.content {
+  margin: 0 24px;
+  display: flex;
+  height: 100%;
+}
+.content .editLeft {
+  width: 290px;
+  background-color: white;
+  padding: 0 12px;
+}
+.content .editLeft .title {
+  font-size: 12px;
+}
+.content .editRight {
+  width: 300px;
+  background-color: lightblue;
+  padding: 0 12px;
+}
+.content .editMain {
+  flex: 1;
+  justify-items: center;
+  padding: 0 12px;
+}/*# sourceMappingURL=EditTop.module.css.map */

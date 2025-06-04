@@ -1,0 +1,38 @@
+.container {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #fff;
+}
+.container:hover {
+  box-shadow: 0 4px 10px yellow;
+  background-color: lightgray;
+}
+
+.title {
+  display: flex;
+}
+.title .right {
+  text-align: right;
+  flex: 3;
+}
+.title .left {
+  flex: 3;
+  text-align: left;
+  font-size: 14px;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+}
+.button-container .left {
+  flex: 3;
+}
+.button-container .right {
+  flex: 3;
+  text-align: right;
+}
+.button-container .right button {
+  color: blue;
+}/*# sourceMappingURL=QuestionCard.module.css.map */

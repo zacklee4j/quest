@@ -19,6 +19,10 @@
 .selected {
     border-color: lightblue !important;
 }
+.locked{
+    opacity: .5;
+    cursor: not-allowed;
+}
 
 .component {
     pointer-events: none;

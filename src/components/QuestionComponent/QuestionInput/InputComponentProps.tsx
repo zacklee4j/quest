@@ -5,7 +5,7 @@ import { Form, Input } from 'antd'
 const PropsComponent: FC<QuestionInputPropsType> = (
   props: QuestionInputPropsType
 ) => {
-  const { title, placeholder, onChange } = props
+  const { title, placeholder, onChange, disabled } = props
   const [form] = Form.useForm()
   useEffect(() => {
     form.setFieldsValue({ title, placeholder })
@@ -21,6 +21,7 @@ const PropsComponent: FC<QuestionInputPropsType> = (
       layout="vertical"
       initialValues={{ title, placeholder }}
       onValuesChange={handleValueCHange}
+      disabled={disabled}
     >
       <Form.Item
         label="Title"

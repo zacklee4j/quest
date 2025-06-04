@@ -24,7 +24,9 @@ function useLoadQuestionData() {
     }
 
     // store componentsList into redux store
-    dispatch(resetComponents({ componentsList, selectedId }))
+    dispatch(
+      resetComponents({ componentsList, selectedId, copiedComponent: null })
+    )
   }, [data])
   // listen the change of id,if id has changed,then call run(the ajax function) to load data
   useEffect(() => {

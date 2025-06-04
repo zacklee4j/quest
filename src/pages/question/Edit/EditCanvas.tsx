@@ -31,8 +31,10 @@ function genComponent(componentInfo: ComponentInfoType) {
   }
 }
 const EditCanvas: FC<EditCanvasType> = ({ loading }) => {
-  const { componentsList, selectedId } = useGetComponentInfo()
   const dispatch = useDispatch()
+  const { componentsList, selectedId, selectedComponent } =
+    useGetComponentInfo()
+
   function handleClick(event: MouseEvent, id: string) {
     event.stopPropagation()
     dispatch(changeSelectedId(id))
@@ -51,12 +53,14 @@ const EditCanvas: FC<EditCanvasType> = ({ loading }) => {
         .filter(c => !c.isHidden)
         .map(c => {
           // hide component when its hidden propty is true
-          const { fe_id } = c
+          const { fe_id, isLocked } = c
           const wrapperDefaultClassName = styles['component-wrapper']
           const selectedIdClassName = styles['selected']
+          const lockedClassName = styles['locked']
           const wrapperClassName = classNames({
             [wrapperDefaultClassName]: true,
             [selectedIdClassName]: fe_id === selectedId,
+            [lockedClassName]: isLocked,
           })
 
           return (

@@ -1,0 +1,14 @@
+.container {
+  height: calc(100vh - 65px - 64px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.container .info {
+  text-align: center;
+}
+.container .info button {
+  height: 50px;
+  font-size: 30px;
+}/*# sourceMappingURL=Register.module.css.map */

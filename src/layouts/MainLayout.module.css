@@ -1,0 +1,19 @@
+.header {
+  padding: 0 24px;
+}
+.header .left {
+  float: left;
+}
+.header .right {
+  float: right;
+}
+
+.mid {
+  min-height: calc(100vh - 64px - 65px);
+}
+
+.footer {
+  text-align: center;
+  background-color: lightblue;
+  border-top: 1px gray;
+}/*# sourceMappingURL=MainLayout.module.css.map */

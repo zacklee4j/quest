@@ -1,0 +1,15 @@
+.wrapper {
+  margin-top: 12px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid blue;
+  padding: 12px;
+  border-radius: 3px;
+}
+.wrapper:hover {
+  border-color: gray;
+}
+
+.component {
+  pointer-events: none;
+}/*# sourceMappingURL=ComponentsLib.module.css.map */

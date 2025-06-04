@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { ComponentPropsType } from '../../components/QuestionComponent'
-import { produce } from 'immer'
-import { Component } from 'react'
-import getNextSelectedId from '../../utils/getNextSelectedId'
+import {
+  getNextSelectedId,
+  insertNewComponent,
+} from '../../utils/getNextSelectedId'
+import cloneDeep from 'lodash.clonedeep'
 
 // store component infomation
 export type ComponentInfoType = {
@@ -10,6 +12,7 @@ export type ComponentInfoType = {
   type: string
   title: string
   isHidden?: boolean
+  isLocked?: boolean
   //all the pomponents should use this props,so it should contain all kinds of compnents's infomation.
   props: ComponentPropsType
 }
@@ -18,11 +21,13 @@ export type ComponentInfoType = {
 export type ComponentsStateType = {
   selectedId: string
   componentsList: Array<ComponentInfoType>
+  copiedComponent: ComponentInfoType | null
 }
 // initialize state
 const INIT_COMPONENT_LIST: ComponentsStateType = {
   selectedId: '',
   componentsList: [],
+  copiedComponent: null,
 }
 
 export const componentReducer = createSlice({
@@ -49,14 +54,7 @@ export const componentReducer = createSlice({
       act: PayloadAction<ComponentInfoType>
     ) => {
       const newComponent = act.payload
-      const { selectedId, componentsList } = state
-      const index = componentsList.findIndex(c => c.fe_id === selectedId)
-      if (index < 0) {
-        componentsList.push(newComponent)
-      } else {
-        componentsList.splice(index + 1, 0, newComponent)
-      }
-      state.selectedId = newComponent.fe_id
+      insertNewComponent(state, newComponent)
     },
     // update component peops
     changeComponentProps: (
@@ -102,6 +100,32 @@ export const componentReducer = createSlice({
         curComponent.isHidden = isHidden
       }
     },
+    lockSelectedComponent: (
+      state: ComponentsStateType,
+      act: PayloadAction<{ fe_id: string }>
+    ) => {
+      // get selected component fe_id
+      const { fe_id } = act.payload
+      const { componentsList } = state
+      if (!fe_id) return
+      // get selected Component
+      const curCopmp = componentsList.find(c => c.fe_id === fe_id)
+      if (curCopmp) {
+        curCopmp.isLocked = !curCopmp.isLocked
+      }
+    },
+    copySelectedComponent: (state: ComponentsStateType) => {
+      const { selectedId, componentsList } = state
+      const selectedComponent = componentsList.find(c => c.fe_id === selectedId)
+      if (!selectedComponent) return
+      state.copiedComponent = cloneDeep(selectedComponent)
+    },
+    pasteCopiedComponent: (state: ComponentsStateType) => {
+      const { copiedComponent } = state
+      if (!copiedComponent) return
+      copiedComponent.fe_id = nanoid()
+      insertNewComponent(state, copiedComponent)
+    },
   },
 })
 
@@ -112,5 +136,8 @@ export const {
   changeComponentProps,
   hiddenSelectedComponent,
   deleteSelectedComponent,
+  lockSelectedComponent,
+  copySelectedComponent,
+  pasteCopiedComponent,
 } = componentReducer.actions
 export default componentReducer.reducer
